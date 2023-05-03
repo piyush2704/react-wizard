@@ -1,59 +1,62 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Wizard from "./components/ui/Wizard/Wizard";
-import { Layout, Input } from "antd";
+import { Layout } from "antd";
 import Form1 from "./components/Form1";
+import Form2 from "./components/Form2";
+import CheckoutForm from "./components/CheckoutForm";
 
-const { Footer, Content } = Layout;
+const { Content } = Layout;
 
-const footerStyle: React.CSSProperties = {
-  textAlign: "center",
-  color: "#fff",
-  justifyContent: "space-between",
+const layoutStyle: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  background: "none",
 };
 
 const contentStyle: React.CSSProperties = {
-  textAlign: 'center',
+  textAlign: "center",
   minHeight: 120,
-  padding:10,
-  lineHeight: '120px',
+  margin: 10,
+  background: "white",
+  padding: 10,
+  minWidth: 800,
+  border: "1px solid #ccc",
+  lineHeight: "120px",
+  boxShadow: "1px 1px 1px",
+  maxWidth: 800,
 };
 const backStyle: React.CSSProperties = {
   marginRight: 5,
 };
 
-
-
-const Page2 = () => (
-  <div>
-    <h1>Pagina 2</h1>
-  </div>
-);
-const Page3 = () => (
-  <div>
-    <h1>Pagina 3</h1>
-  </div>
-);
-
 function App() {
-  const handleNextClick = () => console.log("handled");
+  const [form1Fields, setForm1Fields] = React.useState();
+  const [form2Fields, setForm2Fields] = React.useState();
   return (
-    <Layout>
-      <Wizard steps={3} activePageIndex={1}>
+    <Wizard steps={3} activePageIndex={1}>
+      <Layout style={layoutStyle}>
         <Content style={contentStyle}>
           <Wizard.Pages>
-            <Form1 />
-            <Page2 />
-            <Page3 />
+            <Form1
+              onChange={(newFields) => {
+                setForm1Fields(newFields as any);
+              }}
+              fields={form1Fields as any}
+            />
+            <Form2 onChange={(newFields) => {
+                setForm2Fields(newFields as any);
+              }}
+              checkedValue={form2Fields as any}/>
+            <CheckoutForm form1={form1Fields} form2={form2Fields}/>
           </Wizard.Pages>
-        </Content>
-        <Footer style={footerStyle}>
+
           <Wizard.ButtonPrev style={backStyle} />
-          <Wizard.ButtonNext onClick={handleNextClick} />
-        </Footer>
-      </Wizard>
-    </Layout>
+          <Wizard.ButtonNext />
+        </Content>
+      </Layout>
+    </Wizard>
   );
 }
 
