@@ -12,7 +12,8 @@ type Props = {
 const Wizard = (props: Props) => {
   const { children, steps } = props;
   const [activePageIndex, setActivePageIndex] = React.useState(0);
-
+  const nextStepHandler = React.useRef(() => {});
+  
   const goNextPage = () => {
     setActivePageIndex((index) => index + 1);
   };

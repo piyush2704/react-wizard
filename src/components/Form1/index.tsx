@@ -1,27 +1,55 @@
-import { Button, Checkbox, Form, Input } from 'antd';
 
-const onFinish = (values: any) => {
-    console.log('Success:', values);
-  };
+import * as React from 'react';
+import { Divider, Form, Input } from "antd";
+import { CustomizedFormProps } from '../ui/Wizard/type';
+import { useWizardContext } from '../ui/Wizard/useWizard';
+
+
+const contentStyle: React.CSSProperties = {
+  textAlign: "center",
+  minHeight: 120,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "left",
+  padding: 10,
+  lineHeight: "120px",
+};
+
+
+
+const Form1: React.FC<CustomizedFormProps> = ({ onChange, fields }) => {
+  const [name, setName] = React.useState('')
+  const [description, setDescription] = React.useState('')
   
-
-  const Form1: React.FC = () => (
+  return (
+  <>
+    <h4>Form 1</h4>
+    <Divider />
     <Form
       name="basic"
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600, alignItems: "center",display:"flex", justifyContent: "center" }}
+      style={contentStyle}
       initialValues={{ remember: true }}
-      onFinish={onFinish}
+      fields={fields}
+      onFieldsChange={(_, allFields) => {
+      onChange(allFields);
+    }}
     >
       <Form.Item
         label="Name"
         name="name"
-        rules={[{ max: 63, message: 'Please enter Characters less than 63' }]}
+        style={{ width: 600 }}
+        
+        rules={[{ max: 63, message: "Please enter Characters less than 63" }]}
       >
-        <Input />
+        <Input onChange={(e) => setName(e.target.value)}/>
+      </Form.Item>
+      <Form.Item label="Description" name="description" style={{ width: 600 }}>
+        <Input.TextArea />
       </Form.Item>
     </Form>
-  );
+  </>
+)};
 
-  export default Form1;
+export default Form1;
