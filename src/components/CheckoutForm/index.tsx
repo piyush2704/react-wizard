@@ -18,10 +18,10 @@ import { Card, Form, Input, Layout } from 'antd';
         <Card type="inner" title="Form Details1" bordered={false} style={{ width: 300 }}>
      <ol>
       <li>
-        Name: {form1[0].value}
+        Name: {form1[0]?.value}
       </li>
       <li>
-        Description: {form1[1].value}
+        Description: {form1[1]?.value}
       </li>
      </ol>
   </Card>
