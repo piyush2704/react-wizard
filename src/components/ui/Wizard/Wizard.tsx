@@ -12,7 +12,6 @@ type Props = {
 const Wizard = (props: Props) => {
   const { children, steps } = props;
   const [activePageIndex, setActivePageIndex] = React.useState(0);
-  const nextStepHandler = React.useRef(() => {});
   
   const goNextPage = () => {
     setActivePageIndex((index) => index + 1);
@@ -52,10 +51,20 @@ export const WizardButtonPrev = (props: any) => {
   ) : null;
 };
 
-export const WizardButtonNext = (props: any) => {
+type WizardButtonNextProps = {
+  handleClick: (activePageIndex: number) => void;
+  isPromiseFulfilled: string
+}
+export const WizardButtonNext: React.FC<WizardButtonNextProps>= ({handleClick, isPromiseFulfilled}) => {
   const { goNextPage, activePageIndex, steps } = useWizardContext();
+  React.useEffect(() => {
+    if(isPromiseFulfilled === 'fulfilled' || isPromiseFulfilled ===  'nextstep') {
+      goNextPage()
+    }
+  }, [isPromiseFulfilled])
+
   return activePageIndex < steps - 1 ? (
-    <Button type="primary" {...props} onClick={goNextPage}>
+    <Button type="primary" onClick={() => handleClick(activePageIndex)}>
       Next
     </Button>
   ) : null;
