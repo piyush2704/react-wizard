@@ -17,6 +17,7 @@ Wizard is used to wrap your steps. Each child component will be treated as an in
 
 
 ## Example
+ ```
  <Wizard steps={3} activePageIndex={1}>
       <Layout style={layoutStyle}>
         <Content style={contentStyle}>
@@ -40,7 +41,7 @@ Wizard is used to wrap your steps. Each child component will be treated as an in
         </Content>
       </Layout>
     </Wizard>
-
+```
 ## useWizardContext
 Used to retrieve all methods and properties related to your wizard. Make sure Wizard is wrapped around your component when calling useWizard.
 
