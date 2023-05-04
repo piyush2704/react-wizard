@@ -34,7 +34,6 @@ const Form2: React.FC<Props> = (props: Props) => {
   }, [checkedList])
   return (
     <>
-     <h4>Form 2</h4>
      <Divider/>
       <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
         Check all

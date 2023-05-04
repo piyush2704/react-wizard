@@ -9,23 +9,64 @@ type Props = {
   children: React.ReactNode;
 };
 
+/** Reducer to handle next step event */
+const reducer = (state: any, action: any) => {
+  const { steps, activePageIndex } = state;
+  switch (action.type) {
+    case "NEXT_PAGE":
+      const newIndex = activePageIndex + 1;
+      if (newIndex < steps) {
+        return { ...state, activePageIndex: newIndex };
+      }
+      return state;
+    case "PREV_PAGE":
+      if (activePageIndex > 0) {
+        return { ...state, activePageIndex: activePageIndex - 1 };
+      }
+      return state;
+    case "SET_STEP_COUNT":
+      return { ...state, steps: action.payload };
+    default:
+      return state;
+  }
+};
+const initialState = {
+  activePageIndex: 0,
+  steps: 0
+};
+/**
+ * 
+ * @param props 
+ *  steps: number;
+    activePageIndex: number;
+    children: React.ReactNode;
+ * @returns Wizard component with Context
+ */
 const Wizard = (props: Props) => {
-  const { children, steps } = props;
-  const [activePageIndex, setActivePageIndex] = React.useState(0);
-  
-  const goNextPage = () => {
-    setActivePageIndex((index) => index + 1);
-  };
+  const { children } = props;
+  const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const goPrevPage = () => {
-    setActivePageIndex((index) => index - 1);
-  };
+  const goNextPage = React.useCallback(() => {
+    dispatch({ type: "NEXT_PAGE" });
+  }, []);
 
+  const goPrevPage = React.useCallback(() => {
+    dispatch({ type: "PREV_PAGE" });
+  }, []);
+
+  const setSteps = React.useCallback(
+    (steps: number) => {
+      dispatch({ type: "SET_STEP_COUNT", payload: steps });
+    },
+    [dispatch]
+  );
+  const { activePageIndex, steps } = state;
   const context = {
     activePageIndex,
+    steps,
     goNextPage,
     goPrevPage,
-    steps,
+    setSteps
   };
 
   return (
@@ -36,8 +77,12 @@ const Wizard = (props: Props) => {
 };
 
 export const WizardPages = (props: any) => {
-  const { activePageIndex } = useWizardContext();
+  const { setSteps, activePageIndex } = useWizardContext();
   const pages = React.Children.toArray(props.children);
+  const steps = React.Children.count(props.children);
+  React.useEffect(() => {
+    setSteps(steps);
+  }, [steps, setSteps]);
   const currentPage = pages[activePageIndex];
   return <div {...props}>{currentPage}</div>;
 };
@@ -51,20 +96,12 @@ export const WizardButtonPrev = (props: any) => {
   ) : null;
 };
 
-type WizardButtonNextProps = {
-  handleClick: (activePageIndex: number) => void;
-  isPromiseFulfilled: string
-}
-export const WizardButtonNext: React.FC<WizardButtonNextProps>= ({handleClick, isPromiseFulfilled}) => {
+
+export const WizardButtonNext = () => {
   const { goNextPage, activePageIndex, steps } = useWizardContext();
-  React.useEffect(() => {
-    if(isPromiseFulfilled === 'fulfilled' || isPromiseFulfilled ===  'nextstep') {
-      goNextPage()
-    }
-  }, [isPromiseFulfilled])
 
   return activePageIndex < steps - 1 ? (
-    <Button type="primary" onClick={() => handleClick(activePageIndex)}>
+    <Button type="primary" onClick={goNextPage}>
       Next
     </Button>
   ) : null;

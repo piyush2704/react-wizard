@@ -2,7 +2,61 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+## Solution
+
+This app is to build a reusable wizard component and is structured in following format
+
+## Wizard
+Wizard is used to wrap your steps. Each child component will be treated as an individual step
+
+| Props       | Type          | Required  |
+| ------------- |:-------------:| -----:|
+|  activePageIndex   | string | not required |
+| goNextPage()      | method      |   not required |
+
+
+## Example
+ <Wizard steps={3} activePageIndex={1}>
+      <Layout style={layoutStyle}>
+        <Content style={contentStyle}>
+        <Progress />
+          <Wizard.Pages>
+            <Form1
+              onChange={(newFields) => {
+                setForm1Fields(newFields as any);
+              }}
+              fields={form1Fields as any}
+            />
+            <Form2
+              onChange={(newFields) => {
+                setForm2Fields(newFields as any);
+              }}
+              checkedValue={form2Fields as any}
+            />
+            <CheckoutForm form1={form1Fields} form2={form2Fields} />
+          </Wizard.Pages>
+          <Navigation handleClick={handleClick} currentState={apiCallStatus} />
+        </Content>
+      </Layout>
+    </Wizard>
+
+## useWizardContext
+Used to retrieve all methods and properties related to your wizard. Make sure Wizard is wrapped around your component when calling useWizard.
+
+
+Remark - You can't use useWizard in the same component where Wizard is used.
+
+| name       | type          | description  |
+| ------------- |:-------------:| -----:|
+|  goNextPage   | () => void | Navigates to next step |
+| goPreviousPage     | () => void       |   Navigates to next step  |
+| activePageIndex | number | provides current active page index|
+| steps | number | provides total count of active pages|
+
 ## Available Scripts
+
+
 
 In the project directory, you can run:
 

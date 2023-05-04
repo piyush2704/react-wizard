@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { Divider, Form, Input } from "antd";
 import { CustomizedFormProps } from '../ui/Wizard/type';
-import { useWizardContext } from '../ui/Wizard/useWizard';
 
 
 const contentStyle: React.CSSProperties = {
@@ -19,18 +18,15 @@ const contentStyle: React.CSSProperties = {
 
 const Form1: React.FC<CustomizedFormProps> = ({ onChange, fields }) => {
   const [name, setName] = React.useState('')
-  const [description, setDescription] = React.useState('')
   
   return (
   <>
-    <h4>Form 1</h4>
     <Divider />
     <Form
       name="basic"
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
       style={contentStyle}
-      initialValues={{ remember: true }}
       fields={fields}
       onFieldsChange={(_, allFields) => {
       onChange(allFields);
